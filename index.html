@@ -5,6 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LOJA DE GAMES</title>
+
+    <h2>Login</h2>
+    <input type="text" name="email" id="email" placeholder="e-mail">    
+    <input type="password" name="password" id="password" placeholder="password">    
+    <button onclick="login()">Entrar</button>
+
     
     <hr>
     <h4>Lista de Jogos</h4>
@@ -33,6 +39,32 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
+
+
+    function login() {
+        var emailField = document.getElementById("email");
+        var passwordField = document.getElementById("password");
+
+        var email = emailField.value;
+        var password = passwordField.value;
+
+        axios.post("http://localhost:3050/auth",{
+            email,
+            password,
+        }).then(res=>{
+            var token = res.data.token;
+            alert('logado'+ token);
+        }).catch(()=>{
+            alert('login inválido');
+        })
+
+    }
+
+    var axiosConfig = {
+        headers:{
+            Authorization:"Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJyb25hbGRAcm9uYWxkIiwiaWF0IjoxNjE1NDkyODcwLCJleHAiOjE2MTU2NjU2NzB9.gD4gJBubK8OqwvydcuuZ05MD8yJFPtjEWHT9UJqPrd0"
+        }
+    }
 
     function createGame(){
         var titleInput = document.getElementById("title");
@@ -103,7 +135,7 @@
     }
 
 
-    axios.get("http://localhost:3050/game").then(res=>{
+    axios.get("http://localhost:3050/game",axiosConfig).then(res=>{
         // console.log(res);
         var games = res.data;
         var list = document.getElementById("games");
